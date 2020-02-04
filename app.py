@@ -1,7 +1,5 @@
 import os
 from flask import Flask, request, jsonify
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.ext.automap import automap_base
 import pandas as pd
 import sqlite3
 import json
@@ -9,17 +7,6 @@ import json
 # Init App
 basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
-# Database
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///rent.sqlite3'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-#Init DB
-db = SQLAlchemy(app)
-
-# Base = automap_base()
-# Base.prepare(db.engine, reflect=True)
-# Home = Base.classes.homes
-
-# rooms = db.Table('homes', db.metadata, autoload=True, autoload_with=db.engine)
 
 
 # @app.route('/', methods = ['GET'])
