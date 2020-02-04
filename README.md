@@ -1,5 +1,7 @@
 # Room4RentNYC
 
+First run pip3 install -r requirements.txt
+
 Start app by running python app.py (need python3)
 
 To access rest api use a GET request on localhost:5000/closest_rooms with the following parameters:
