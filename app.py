@@ -1,7 +1,6 @@
 import os
 from flask import Flask, request, jsonify
 import sqlite3
-import json
 
 # Init App
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -18,10 +17,21 @@ app = Flask(__name__)
 @app.route('/closest_rooms', methods = ['GET'])
 def closest_rooms():
 
-    query = request.args.get('query')
+   query = request.args.get('query')
     long = request.args.get('long')
     lat = request.args.get('lat')
-    print('params', query, long, lat)
+
+    if not lat and not long and not query:
+        return 'please enter coordinates and/or query string'
+
+    if (not lat and long) or (not long and lat):
+        return 'please enter both longitude and latitude'
+
+    if float(lat) < -90 or float(lat) > 90:
+        return 'please enter a latitude range from -90 to 90'
+
+    if float(long) < -180 or float(long) > 180:
+        return 'please enter a longitude range from -90 to 90'
 
     if lat and long and not query:
         rooms = find_closest_apartments(lat, long)
@@ -31,14 +41,6 @@ def closest_rooms():
 
     if lat and long and query:
         rooms = find_closest_off_query(lat, long, query)
-
-    if not lat and not long and not query:
-        return 'please enter coordinates and/or query string'
-
-    if (not lat and long) or (not long and lat):
-        return 'please enter both longitude and latitude'
-
-    return jsonify({'rooms': rooms})
 
 
 def find_closest_apartments(source_latitude,source_longitude):
@@ -130,7 +132,6 @@ def find_closest_off_query(source_latitude, source_longitude, query_string):
     col_name = "name"
     for word in query_string.split(): query +=  col_name + " like \'%"+word +"%\' or "
     query = query[:-4]
-    print(query)
 
     conn = sqlite3.connect('rent.sqlite3')
 
