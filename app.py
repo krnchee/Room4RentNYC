@@ -1,6 +1,5 @@
 import os
 from flask import Flask, request, jsonify
-import pandas as pd
 import sqlite3
 import json
 
