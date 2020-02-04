@@ -26,6 +26,11 @@ def closest_rooms():
 
     if (not lat and long) or (not long and lat):
         return 'please enter both longitude and latitude'
+   try:
+        float(lat)
+        float(long)
+    except:
+        return 'please enter a number for latitude and longitude'
 
     if float(lat) < -90 or float(lat) > 90:
         return 'please enter a latitude range from -90 to 90'
