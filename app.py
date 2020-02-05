@@ -6,46 +6,42 @@ import sqlite3
 basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
 
-
-# @app.route('/', methods = ['GET'])
-# def index():
-#     results = db.session.query(rooms).all()
-#     for r in results:
-#         print(r.name)
-#     return ''
-
 @app.route('/closest_rooms', methods = ['GET'])
 def closest_rooms():
 
-   query = request.args.get('query')
-   long = request.args.get('long')
-   lat = request.args.get('lat')
+    query = request.args.get('query')
+    long = request.args.get('long')
+    lat = request.args.get('lat')
 
-   if not lat and not long and not query:
-       return 'please enter coordinates and/or query string'
+    if not lat and not long and not query:
+        return 'please enter coordinates and/or query string'
 
-   if (not lat and long) or (not long and lat):
-       return 'please enter both longitude and latitude'
-   try:
+    if (not lat and long) or (not long and lat):
+        return 'please enter both longitude and latitude'
+
+    try:
         float(lat)
         float(long)
-   except:
-       return 'please enter a number for latitude and longitude'
+    except:
+        return 'please enter a number for latitude and longitude'
 
-   if float(lat) < -90 or float(lat) > 90:
-       return 'please enter a latitude range from -90 to 90'
 
-   if float(long) < -180 or float(long) > 180:
-       return 'please enter a longitude range from -90 to 90'
-   
-   if lat and long and not query:
-       rooms = find_closest_apartments(lat, long)
+    if float(lat) < -90 or float(lat) > 90:
+        return 'please enter a latitude range from -90 to 90'
 
-   if query and not (lat and long):
-       rooms = query_search(query)
+    if float(long) < -180 or float(long) > 180:
+        return 'please enter a longitude range from -90 to 90'
 
-   if lat and long and query:
-       rooms = find_closest_off_query(lat, long, query)
+    if lat and long and not query:
+        rooms = find_closest_apartments(lat, long)
+
+    if query and not (lat and long):
+        rooms = query_search(query)
+
+    if lat and long and query:
+        rooms = find_closest_off_query(lat, long, query)
+
+    return jsonify({'rooms': rooms})
 
 
 def find_closest_apartments(source_latitude,source_longitude):
@@ -190,3 +186,4 @@ def find_closest_off_query(source_latitude, source_longitude, query_string):
 # Run Server
 if __name__ == '__main__':
     app.run(debug=True)
+
