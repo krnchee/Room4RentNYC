@@ -29,23 +29,23 @@ def closest_rooms():
    try:
         float(lat)
         float(long)
-    except:
-        return 'please enter a number for latitude and longitude'
+   except:
+       return 'please enter a number for latitude and longitude'
 
-    if float(lat) < -90 or float(lat) > 90:
-        return 'please enter a latitude range from -90 to 90'
+   if float(lat) < -90 or float(lat) > 90:
+       return 'please enter a latitude range from -90 to 90'
 
-    if float(long) < -180 or float(long) > 180:
-        return 'please enter a longitude range from -90 to 90'
+   if float(long) < -180 or float(long) > 180:
+       return 'please enter a longitude range from -90 to 90'
+   
+   if lat and long and not query:
+       rooms = find_closest_apartments(lat, long)
 
-    if lat and long and not query:
-        rooms = find_closest_apartments(lat, long)
+   if query and not (lat and long):
+       rooms = query_search(query)
 
-    if query and not (lat and long):
-        rooms = query_search(query)
-
-    if lat and long and query:
-        rooms = find_closest_off_query(lat, long, query)
+   if lat and long and query:
+       rooms = find_closest_off_query(lat, long, query)
 
 
 def find_closest_apartments(source_latitude,source_longitude):
